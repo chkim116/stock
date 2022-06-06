@@ -60,7 +60,7 @@ export const useStockColumns = (headText: HeadText[]) => {
       render: (_: string, record: BodyTexts) => (
         <a
           href={`https://www.google.com/search?q=${encodeURIComponent(
-            record.종목
+            record.종목.split("@")[0]
           )}&sxsrf=ALiCzsbOUeEU3RbWu7bMESXdV4ceYEyzng:1654500586856&source=lnms&tbm=nws&sa=X&ved=2ahUKEwigjor-ppj4AhVkq1YBHSAJAOIQ_AUoAXoECAIQAw&cshid=1654500589546948&biw=1440&bih=796&dpr=2`}
           target="_blank"
           rel="noreferrer"
