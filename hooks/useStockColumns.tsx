@@ -17,6 +17,19 @@ export const useStockColumns = (headText: HeadText[]) => {
     dataIndex: text,
     key: text,
     render: (value: string): string | ReactNode => {
+      if (text.includes("종목")) {
+        const [originText, link] = value.split("@");
+        return (
+          <a
+            href={`https://kr.investing.com/${link}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {originText}
+          </a>
+        );
+      }
+
       if (text.includes("변동")) {
         if (value.includes("+")) {
           return <PlusText>{value}</PlusText>;

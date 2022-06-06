@@ -44,14 +44,15 @@ export function convertToTableTexts(data: string) {
     }
 
     for (const td of tBody) {
-      bodyTexts.push(
-        $(td)
-          .text()
-          .replace(/(^\n|\n$)/g, "")
-          .split("\n")
-          .slice(1, 9)
-          .join("\n")
-      );
+      const link = $(td).find("a").attr("href");
+      const withLink = $(td)
+        .text()
+        .replace(/(^\n|\n$)/g, "")
+        .split("\n")
+        .slice(1, 9);
+
+      withLink[0] += `@${link}`;
+      bodyTexts.push(withLink.join("\n"));
     }
   });
 
