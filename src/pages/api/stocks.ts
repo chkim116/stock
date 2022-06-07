@@ -1,6 +1,6 @@
 import { MOST_ACTIVE_STOCKS_URL, TOP_STOCK_GAINERS_URL } from "configs";
 import { NextApiResponse, NextApiRequest } from "next";
-import { stockService } from "services";
+import { stockService } from "@services/index";
 
 export default async function handler(
   req: NextApiRequest,

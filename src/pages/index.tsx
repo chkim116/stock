@@ -3,9 +3,9 @@ import { useState } from "react";
 import useSWR from "swr";
 import styled from "@emotion/styled";
 
-import { StockTable } from "components/StockTable";
+import { StockTable } from "@components/StockTable";
 import { day, getFetcher, StockEntity } from "core";
-import { useStockColumns } from "hooks/useStockColumns";
+import { useStockColumns } from "@hooks/useStockColumns";
 
 const Wrap = styled.div`
   max-width: 1200px;
