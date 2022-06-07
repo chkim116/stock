@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { ReactNode } from "react";
 import { ColumnType } from "antd/lib/table";
 
-import { BodyTexts, HeadText } from "core";
+import { BodyTexts, HeadText } from "@core/entities";
 
 const PlusText = styled.span`
   color: red;

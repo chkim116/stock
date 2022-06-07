@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { StockUrlType } from "configs";
-import { HeadText } from "core";
+import { HeadText } from "@core/entities";
 import { convertToTableTexts } from "./stockService.convert";
 
 function sortByTradeCount(

@@ -4,7 +4,9 @@ import useSWR from "swr";
 import styled from "@emotion/styled";
 
 import { StockTable } from "@components/StockTable";
-import { day, getFetcher, StockEntity } from "core";
+import { day } from "@core/day";
+import { getFetcher } from "@core/api";
+import { StockEntity } from "@core/entities";
 import { useStockColumns } from "@hooks/useStockColumns";
 
 const Wrap = styled.div`

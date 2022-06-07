@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Table } from "antd";
 import { ColumnType } from "antd/lib/table";
-import { BodyTexts } from "core";
+import { BodyTexts } from "@core/entities";
 
 const AntdTable = styled(Table)`
   thead th {

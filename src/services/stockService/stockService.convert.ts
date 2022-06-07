@@ -1,5 +1,5 @@
 import cheerio from "cheerio";
-import { BodyTexts, HeadText } from "core";
+import { BodyTexts, HeadText } from "@core/entities";
 
 export function convertToObject(headText: HeadText[], bodyTexts: string[]) {
   const results: BodyTexts[] = [];
