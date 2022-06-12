@@ -2,7 +2,7 @@
  * 금융위원회_주식시세정보 URL
  */
 export const STOCK_PRICE_INFO_URL =
-  "http://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService";
+  "https://api.odcloud.kr/api/GetStockSecuritiesInfoService/v1/getStockPriceInfo";
 
 export type ApiUrlType = typeof STOCK_PRICE_INFO_URL;
 

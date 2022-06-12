@@ -1,3 +1,3 @@
 export * from "./stocks.entity";
 
-export * from "./stockPriceInfo/stockPriceInfo.entity";
+export * from "./stockPriceInfo";

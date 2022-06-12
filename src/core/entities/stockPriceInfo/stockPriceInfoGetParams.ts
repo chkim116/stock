@@ -3,11 +3,6 @@
  */
 export interface stockPriceInfoGetParams {
   /**
-   * 인증키
-   */
-  sizeKey: string;
-
-  /**
    * 한 페이지 결과수
    * @default 10
    */
@@ -23,14 +18,17 @@ export interface stockPriceInfoGetParams {
   resultType?: string;
   /**
    * 검색값과 기준일자가 일치하는 데이터 검색
+   * @example YYYYMMDD
    */
   basDt?: string;
   /**
-   * 기준일자가 검색값보다 크거나 같은 데이터 검색
+   * 기준일자가 검색값보다 크거나 같은 데이터
+   * @example YYYYMMDD
    */
   beginBasDt?: string;
   /**
    * 기준일자가 검색값보다 작은 데이터 검색
+   * @example YYYYMMDD
    */
   endBasDt?: string;
   /**
