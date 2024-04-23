@@ -1,8 +1,8 @@
+"use client";
 import { Global } from "@emotion/react";
 import { ReactNode } from "react";
-
-import { GlobalStyles } from "styles/GlobalStyles";
-import "antd/dist/antd.css";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { GlobalStyles } from "@providers/styles/GlobalStyles";
 import "dayjs/locale/ko";
 
 interface AppProviderProps {
@@ -13,7 +13,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <>
       <Global styles={GlobalStyles} />
-      {children}
+      <AntdRegistry>{children}</AntdRegistry>
     </>
   );
 };
