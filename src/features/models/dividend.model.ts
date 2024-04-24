@@ -1,6 +1,7 @@
 import { DividendSearchParams } from "@features/apis/entities";
 
-export interface DividendSearchParamsModel extends DividendSearchParams {}
+export interface DividendSearchParamsModel
+  extends Partial<DividendSearchParams> {}
 
 export interface DividendSearchModel {
   /**
@@ -22,9 +23,9 @@ export interface DividendSearchModel {
   /**
    * 배당성향
    *
-   * @example 35.53%
+   * @example 35.53
    */
-  payoutRatio: string;
+  payoutRatio: number;
   /**
    * 배당금
    */
@@ -32,15 +33,15 @@ export interface DividendSearchModel {
   /**
    * ROE
    *
-   * @example 10.53%
+   * @example 10.53
    */
-  roe: string;
+  roe: number;
   /**
    * PER
    *
    * @example 10.53
    */
-  per: string;
+  per: number;
   /**
    * 1년전 배당금
    */
@@ -53,4 +54,8 @@ export interface DividendSearchModel {
    * 3년전 배당금
    */
   threeYearAgoDividend: string;
+  /**
+   * 배당 개근
+   */
+  dividendAttendance: boolean;
 }

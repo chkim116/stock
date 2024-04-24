@@ -1,11 +1,19 @@
 import apis from "@features/apis";
 import { DividendSearchParamsModel } from "@features/models/dividend.model";
-import { toDividendSearchModel } from "./dividend.mapper";
+import {
+  toDividendSearchModel,
+  toDividendSearchParams,
+} from "./dividend.mapper";
 
 export const dividendRepository = {
   fetchDividend: async (params: DividendSearchParamsModel) => {
-    const result = await apis.dividend.fetchDividend(params);
+    const { data, time } = await apis.dividend.fetchDividend(
+      toDividendSearchParams(params)
+    );
 
-    return toDividendSearchModel(result);
+    return {
+      dividendList: toDividendSearchModel(data),
+      time,
+    };
   },
 };

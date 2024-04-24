@@ -18,6 +18,7 @@
     "paths": {
       "@core/*": ["src/core/*"],
       "@features/*": ["src/features/*"],
+      "@common/*": ["src/common/*"],
       "@app/*": ["src/app/*"],
       "@shared/*": ["src/shared/*"],
       "@providers/*": ["src/providers/*"],

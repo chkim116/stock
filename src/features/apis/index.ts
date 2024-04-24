@@ -1,4 +1,4 @@
-import { dividendApis } from "./dividend";
+import { dividendApis } from "./dividend.api";
 
 const apis = {
   dividend: dividendApis,

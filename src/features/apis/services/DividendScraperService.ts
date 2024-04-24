@@ -2,6 +2,13 @@ import puppeteer, { Browser, Page } from "puppeteer";
 import cheerio from "cheerio";
 import { ScarperService } from "./scraperService.type";
 import { DividendEntity } from "../entities";
+import { LRUCache } from "lru-cache";
+import dayjs from "dayjs";
+import { replace, toNumber } from "safers";
+
+function refineNumber(value: unknown) {
+  return toNumber(replace(value, /,/g, ""));
+}
 
 function getOrThrow<T>(something: T) {
   if (!something) {
@@ -11,22 +18,42 @@ function getOrThrow<T>(something: T) {
 }
 
 export class DividendScraperService implements ScarperService<DividendEntity> {
+  private _cache: LRUCache<string, DividendEntity[]> = new LRUCache<
+    string,
+    DividendEntity[]
+  >({ max: 50 });
+  private _key = "";
+
   private _lastPage = 0;
   private _page: Page | null = null;
   private _browser: Browser | null = null;
   private _scrapedData: DividendEntity[] = [];
+  private _pending = false;
 
   getData(): DividendEntity[] {
-    return this._scrapedData;
+    return this._cache.get(this._key) || [];
+  }
+
+  getScrapedTime(): string {
+    return this._key;
   }
 
   async scrape(): Promise<DividendEntity[]> {
-    if (this._scrapedData.length) {
+    const currentDate = dayjs(new Date()).format("YYYY-MM-DD");
+    const cachedData = this._cache.get(currentDate);
+
+    if (cachedData) {
+      return cachedData;
+    }
+
+    if (this._pending) {
+      console.log("Pending...");
       return this.getData();
     }
 
     try {
-      await this.prepare();
+      console.log("Scraping...");
+      await this.prepareScrap();
       await this.getLastPage();
 
       const pageList = Array.from(
@@ -37,25 +64,31 @@ export class DividendScraperService implements ScarperService<DividendEntity> {
       for await (const page of pageList) {
         await this.scrapeData(page);
       }
+
+      console.log("Scraping done!");
     } finally {
-      this.prepareDestroy();
+      this.prepareScrapDestroy();
     }
 
-    console.log(this.getData());
+    this._key = currentDate;
+    this._cache.set(this._key, this._scrapedData);
+
     return this.getData();
   }
 
-  private async prepare() {
+  private async prepareScrap() {
     this._browser = await puppeteer.launch();
     this._page = await this._browser.newPage();
     this._lastPage = 0;
+    this._pending = true;
   }
 
-  private async prepareDestroy() {
+  private async prepareScrapDestroy() {
     await this._browser?.close();
     this._browser = null;
     this._page = null;
     this._lastPage = 0;
+    this._pending = false;
   }
 
   private async scrapeData(page: number) {
@@ -73,7 +106,7 @@ export class DividendScraperService implements ScarperService<DividendEntity> {
           const name = $(element).find("td:nth-child(1)").text();
           const code =
             $(element)
-              .find("td:nth-child(1)")
+              .find("td:nth-child(1) > a")
               .attr("href")
               ?.split("code=")[1] || "";
 
@@ -89,13 +122,15 @@ export class DividendScraperService implements ScarperService<DividendEntity> {
               .find("td:nth-child(3)")
               .text()
               .replace(/\s/g, ""),
-            payoutRatio: $(element).find("td:nth-child(6)").text(),
-            roe: $(element).find("td:nth-child(7)").text(),
-            per: $(element).find("td:nth-child(8)").text(),
-            dividend: $(element).find("td:nth-child(4)").text(),
-            year1: $(element).find("td:nth-child(10)").text(),
-            year2: $(element).find("td:nth-child(11)").text(),
-            year3: $(element).find("td:nth-child(12)").text(),
+            payoutRatio: refineNumber(
+              $(element).find("td:nth-child(6)").text()
+            ),
+            roe: refineNumber($(element).find("td:nth-child(7)").text()),
+            per: refineNumber($(element).find("td:nth-child(8)").text()),
+            dividend: refineNumber($(element).find("td:nth-child(4)").text()),
+            year1: refineNumber($(element).find("td:nth-child(10)").text()),
+            year2: refineNumber($(element).find("td:nth-child(11)").text()),
+            year3: refineNumber($(element).find("td:nth-child(12)").text()),
           };
 
           this._scrapedData.push(dividendData);
@@ -112,7 +147,7 @@ export class DividendScraperService implements ScarperService<DividendEntity> {
 
     try {
       const last = $(".pgRR > a").attr("href")?.split("page=")[1];
-      this._lastPage = Number.isNaN(last) ? 0 : Number(last);
+      this._lastPage = toNumber(last);
     } finally {
       //
     }
